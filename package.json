@@ -1,0 +1,25 @@
+{
+  "name": "discord-bot-voice-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Index.js",
+  "scripts": {
+    "start": "nodemon ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://192.168.0.100:3000/git/gnomgad/discord-bot-voice-manager.git"
+  },
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "sqlite3": "^5.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "author": "",
+  "license": "ISC"
+}
