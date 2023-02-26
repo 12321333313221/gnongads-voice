@@ -77,7 +77,11 @@ class VoiceStateUpdateController {
                 ) {
                     func = this.createVipVoiceChannel;
                 }
-                func(newState.guild, newState.channel.name, newState.member)
+                func(
+                    newState.guild,
+                    `• ${newState.channel.name}`,
+                    newState.member
+                )
                     .then((channel) => {
                         return channel.setParent(newState.channel.parentId, {
                             lockPermissions: false,
