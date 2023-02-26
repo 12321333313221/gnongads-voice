@@ -1,9 +1,15 @@
 const DB = require("./DB");
 const db = new DB(process.env.DBPATH);
 
-const { AdminChannel } = require("./models");
+const { AdminChannel, UserChannel } = require("./models");
 
-AdminChannel.setDB(db);
-AdminChannel.createTable();
+const models = {};
+const adminChannel = new AdminChannel(db, models, "adminChannels");
+adminChannel.createTable();
+const userChannel = new UserChannel(db, models, "userChannels");
+userChannel.createTable();
 
-module.exports = { db: db, models: { AdminChannel } };
+models["AdminChannel"] = adminChannel;
+models["UserChannel"] = userChannel;
+
+module.exports = { db, models };

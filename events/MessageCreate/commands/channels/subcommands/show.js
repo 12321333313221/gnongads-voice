@@ -1,7 +1,7 @@
 module.exports = {
     name: "show",
     func: function (models, message, commands) {
-        models.AdminChannel.getByGuildId(message.guildId).then((data) => {
+        models.AdminChannel.getAll(message.guildId).then((data) => {
             let array = [];
             if (data.length === 0) {
                 message.reply("Каналов нет");

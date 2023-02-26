@@ -19,3 +19,4 @@ client.login(process.env.TOKEN);
 
 client.on(Events.ClientReady, evman.clientReadyController);
 client.on(Events.MessageCreate, evman.messageCreateController);
+client.on(Events.VoiceStateUpdate, evman.voiceStateUpdateController);
