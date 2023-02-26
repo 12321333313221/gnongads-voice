@@ -41,7 +41,10 @@ class VoiceStateUpdateController {
     processDeleteChannel(oldState, newState) {
         let guildId = oldState.guild.id,
             creatorId = oldState.member.id;
-        this.models.UserChannel.getChannelsByCreatorId(guildId, creatorId)
+        return this.models.UserChannel.getChannelsByCreatorId(
+            guildId,
+            creatorId
+        )
             .then((data) => {
                 let channel = data.find(
                     (channel) => channel.channelId === oldState.channelId
@@ -60,59 +63,86 @@ class VoiceStateUpdateController {
                         );
                     })
                     .catch((err) => console.log("err ", err));
+                this.models.KickedUser.deleteChannel(
+                    oldState.guild.id,
+                    oldState.channelId,
+                    oldState.member.id
+                );
             })
 
             .catch((err) => console.log("err ", err));
     }
     processCreateChannel(oldState, newState) {
-        this.models.AdminChannel.getAll(newState.guild.id).then((data) => {
-            if (
-                data.find((channel) => channel.channelId === newState.channelId)
-            ) {
-                let func = this.createVoiceChannel;
+        return this.models.AdminChannel.getAll(newState.guild.id).then(
+            (data) => {
                 if (
-                    newState.member.roles.cache.find(
-                        (role) => role.id === "1078705130972647565"
+                    data.find(
+                        (channel) => channel.channelId === newState.channelId
                     )
                 ) {
-                    func = this.createVipVoiceChannel;
+                    let func = this.createVoiceChannel;
+                    if (
+                        newState.member.roles.cache.find(
+                            (role) => role.id === "1078705130972647565"
+                        )
+                    ) {
+                        func = this.createVipVoiceChannel;
+                    }
+                    func(
+                        newState.guild,
+                        `• ${newState.channel.name}`,
+                        newState.member
+                    )
+                        .then((channel) => {
+                            return channel.setParent(
+                                newState.channel.parentId,
+                                {
+                                    lockPermissions: false,
+                                }
+                            );
+                        })
+                        .then((channel) => {
+                            return new Promise(function (res, rej) {
+                                newState
+                                    .setChannel(channel)
+                                    .then(function (guildMember) {
+                                        res({ channel, guildMember });
+                                    })
+                                    .catch((err) => rej(err));
+                            });
+                        })
+                        .then((obj) => {
+                            console.log(
+                                ` создан канал гильдии [${obj.guildMember.guild.id}] канал [${obj.channel.id}] [${obj.channel.name}] юзером [${obj.guildMember.id}] ${obj.guildMember.user.tag}`
+                            );
+                            return this.models.UserChannel.create(
+                                newState.guild.id,
+                                newState.channel.parentId,
+                                obj.channel.id,
+                                obj.guildMember.id,
+                                false
+                            );
+                        })
+                        .catch((err) => {
+                            console.log("err", err);
+                        });
                 }
-                func(
-                    newState.guild,
-                    `• ${newState.channel.name}`,
-                    newState.member
-                )
-                    .then((channel) => {
-                        return channel.setParent(newState.channel.parentId, {
-                            lockPermissions: false,
-                        });
-                    })
-                    .then((channel) => {
-                        return new Promise(function (res, rej) {
-                            newState
-                                .setChannel(channel)
-                                .then(function (guildMember) {
-                                    res({ channel, guildMember });
-                                })
-                                .catch((err) => rej(err));
-                        });
-                    })
-                    .then((obj) => {
-                        console.log(
-                            ` создан канал гильдии [${obj.guildMember.guild.id}] канал [${obj.channel.id}] [${obj.channel.name}] юзером [${obj.guildMember.id}] ${obj.guildMember.user.tag}`
-                        );
-                        return this.models.UserChannel.create(
-                            newState.guild.id,
-                            newState.channel.parentId,
-                            obj.channel.id,
-                            obj.guildMember.id,
-                            false
-                        );
-                    })
-                    .catch((err) => {
-                        console.log("err", err);
-                    });
             }
+        );
+    }
+    weNeedDisconnect(guildId, channelId, member) {
+        return this.models.KickedUser.getKickedUser(
+            guildId,
+            channelId,
+            member.id
+        ).then((data) => {
+            if (data.length === 0) {
+                return;
+            }
+            console.log(
+                `[${guildId}] ${member.user.tag}[ ${member.id}] был кикнут из ${channelId}`
+            );
+            member.voice.disconnect("пользователь запросил кик");
         });
     }
     func(oldState, newState) {
@@ -124,7 +154,7 @@ class VoiceStateUpdateController {
          * 3. пользователь зашел в войс канал
          */
 
-        if (!newState.channelId) {
+        if (!newState.channelId && oldState.channelId) {
             /**
              * человек вышел с войс канала
              */
@@ -133,15 +163,35 @@ class VoiceStateUpdateController {
             /**
              * человек перешел из войс канала в канал
              */
-            this.processDeleteChannel(oldState, newState);
-            this.processCreateChannel(oldState, newState);
-            console.log("change");
+            this.weNeedDisconnect(
+                newState.guild.id,
+                newState.channelId,
+                newState.member
+            )
+                .then(() => {
+                    return this.processDeleteChannel(oldState, newState);
+                })
+                .then(() => {
+                    return this.processCreateChannel(oldState, newState);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         } else if (newState.channelId) {
             /**
              * человек зашел в новый войс канал
              */
-
-            this.processCreateChannel(oldState, newState);
+            this.weNeedDisconnect(
+                newState.guild.id,
+                newState.channelId,
+                newState.member
+            )
+                .then(() => {
+                    return this.processCreateChannel(oldState, newState);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     }
 }
