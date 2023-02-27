@@ -1,8 +1,8 @@
 class Base {
     constructor(db, models, name = "") {
-        this.db = db;
+        this.setDB(db);
         this.models = models;
-        this.name = name;
+        this.setName(name);
     }
 
     setDB(db) {
