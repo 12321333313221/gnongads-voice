@@ -7,6 +7,6 @@ module.exports = {
         return this.alias.find((alias) => alias === str);
     },
     getSubcommand: function (str) {
-        return this.subcommands.find((act) => act.name === str);
+        return this.subcommands.find((act) => act.name === str[1]);
     },
 };

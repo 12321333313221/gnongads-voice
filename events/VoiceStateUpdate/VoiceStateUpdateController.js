@@ -52,21 +52,37 @@ class VoiceStateUpdateController {
                 if (!channel) {
                     return;
                 }
-                this.deleteVoiceChannel(oldState.guild, channel.channelId)
-                    .then(() => {
-                        console.log(
-                            ` удален канал гильдии [${channel.guildId}] канал [${channel.channelId}] юзером [${channel.creatorId}] `
-                        );
-                        return this.models.UserChannel.delete(
-                            channel.guildId,
-                            channel.channelId
-                        );
-                    })
-                    .catch((err) => console.log("err ", err));
-                this.models.KickedUser.deleteChannel(
+
+                let dvcPromise = this.deleteVoiceChannel(
+                    oldState.guild,
+                    channel.channelId
+                );
+                let dPromise = this.models.UserChannel.delete(
+                    channel.guildId,
+                    channel.channelId
+                );
+                let dcPromise = this.models.KickedUser.deleteChannel(
                     oldState.guild.id,
                     oldState.channelId,
                     oldState.member.id
+                );
+                let customPromise = new Promise((resolve, reject) => {
+                    resolve(channel);
+                });
+                return Promise.all([
+                    dvcPromise,
+                    dPromise,
+                    dcPromise,
+                    customPromise,
+                ]);
+            })
+            .then((data) => {
+                if (!data) {
+                    return;
+                }
+                let channel = data[3];
+                console.log(
+                    ` удален канал гильдии [${channel.guildId}] канал [${channel.channelId}] юзером [${channel.creatorId}] `
                 );
             })
 

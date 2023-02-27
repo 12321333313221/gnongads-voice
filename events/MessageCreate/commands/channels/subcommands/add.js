@@ -20,18 +20,15 @@ module.exports = {
                 reason: "Обычный канал канал",
             })
             .then((channel) => {
-                models.AdminChannel.create(
+                return models.AdminChannel.create(
                     message.guildId,
                     categoryId,
                     channel.id,
                     message.member.id
-                )
-                    .then(() => {
-                        message.reply(`канал создан <#${channel.id}>`);
-                    })
-                    .catch(() => {
-                        message.reply("ошибка");
-                    });
+                );
+            })
+            .then(() => {
+                message.reply(`канал создан <#${channel.id}>`);
             })
             .catch((err) => {
                 console.log(err);

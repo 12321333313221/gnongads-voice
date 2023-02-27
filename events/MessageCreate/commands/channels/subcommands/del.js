@@ -9,13 +9,10 @@ module.exports = {
         message.guild.channels
             .delete(channelId, "пользователь запросил удаление")
             .then(() => {
-                models.AdminChannel.delete(message.guildId, channelId)
-                    .then(() => {
-                        message.reply(`канал удален `);
-                    })
-                    .catch(() => {
-                        message.reply("ошибка");
-                    });
+                return models.AdminChannel.delete(message.guildId, channelId);
+            })
+            .then(() => {
+                message.reply(`канал удален `);
             })
             .catch((err) => {
                 console.log(err);
