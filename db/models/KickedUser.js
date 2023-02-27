@@ -61,6 +61,7 @@ class KickedUser extends Base {
             [guildId, channelId, creatorId]
         );
     }
+
     /**
      * получить из таблицы юзера
      * @param {*} guildId айди гильдии

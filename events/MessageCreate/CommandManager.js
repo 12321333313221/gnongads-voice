@@ -21,7 +21,7 @@ class CommandManager {
             return null;
         }
 
-        commandObj = commandObj.getSubcommand(commands[1]);
+        commandObj = commandObj.getSubcommand(commands);
         if (!commandObj) {
             message.reply(this.incorrectCommand);
             return null;
