@@ -48,7 +48,7 @@ module.exports = {
                 }
                 if (kickedUser.length != 0) {
                     /** если есть кикнутый пользователь то его надо убрать */
-                    models.KickedUser.delete(
+                    models.KickedUser.deleteBykickedUserId(
                         kickedUser[0].guildId,
                         kickedUser[0].channelId,
                         kickedUser[0].kickedUserId

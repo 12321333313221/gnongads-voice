@@ -36,26 +36,40 @@ class KickedUser extends Base {
     }
 
     /**
-     * Удалить из таблицы юзера
+     * Очищает всю таблицу банов канала
      * @param {*} guildId айди гильдии
      * @param {*} channelId айди канала
-     * @param {*} kickedUserId айди кикнутого человека
      * @returns {Promise}
      */
-    delete(guildId, channelId, kickedUserId) {
+    delete(guildId, channelId) {
+        return this.db.run(
+            `DELETE FROM ${this.name} WHERE (guildId=? AND channelId=? )`,
+            [guildId, channelId]
+        );
+    }
+
+    /**
+     * Убирает из таблицы пользователя
+     * @param {*} guildId айди гильдии
+     * @param {*} channelId айди канала
+     * @param {*} kickedUserId айди кикнутого юзера
+     * @returns {Promise}
+     */
+    deleteBykickedUserId(guildId, channelId, kickedUserId) {
         return this.db.run(
             `DELETE FROM ${this.name} WHERE (guildId=? AND channelId=? AND kickedUserId=?)`,
             [guildId, channelId, kickedUserId]
         );
     }
+
     /**
      * Удалить из таблицы юзера
      * @param {*} guildId айди гильдии
      * @param {*} channelId айди канала
-
+     * @param {*} creatorId айди создателя
      * @returns {Promise}
      */
-    deleteChannel(guildId, channelId, creatorId) {
+    deleteByCreatorId(guildId, channelId, creatorId) {
         return this.db.run(
             `DELETE FROM ${this.name} WHERE (guildId=? AND channelId=? AND creatorId=?)`,
             [guildId, channelId, creatorId]
