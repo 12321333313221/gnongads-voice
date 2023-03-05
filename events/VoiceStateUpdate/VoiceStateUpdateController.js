@@ -123,9 +123,17 @@ class VoiceStateUpdateController {
                 );
                 if (findedChannel) {
                     let func = this.createVoiceChannel;
-                    let memberVip = newState.member.roles.cache.find(
-                        (role) => role.id === "1078705130972647565"
-                    );
+                    let memberVip = newState.member.roles.cache.find((role) => {
+                        let vips = [
+                            "1078705130972647565",
+                            "1081615301738766392",
+                        ];
+                        for (let i = 0; i < vips.length; i++) {
+                            if (vips[i] === role.id) {
+                                return true;
+                            }
+                        }
+                    });
                     if (memberVip) {
                         func = this.createVipVoiceChannel;
                     }
