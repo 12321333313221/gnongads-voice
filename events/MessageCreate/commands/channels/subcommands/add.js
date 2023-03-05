@@ -1,4 +1,5 @@
 const { ChannelType } = require("discord.js");
+const Promise = require("bluebird");
 module.exports = {
     name: "add",
     func: function (models, message, commands) {
@@ -20,15 +21,20 @@ module.exports = {
                 reason: "Обычный канал канал",
             })
             .then((channel) => {
-                return models.AdminChannel.create(
+                let createPromise = models.AdminChannel.create(
                     message.guildId,
                     categoryId,
                     channel.id,
                     message.member.id
                 );
+                let channelPromise = new Promise((res, rej) => {
+                    res(channel);
+                });
+                return Promise.all([createPromise, channelPromise]);
             })
-            .then(() => {
-                message.reply(`канал создан <#${channel.id}>`);
+            .then((data) => {
+                console.log(data);
+                message.reply(`канал создан <#${data[1].id}>`);
             })
             .catch((err) => {
                 console.log(err);
