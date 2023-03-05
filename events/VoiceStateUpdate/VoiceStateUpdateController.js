@@ -111,11 +111,9 @@ class VoiceStateUpdateController {
                     ) {
                         func = this.createVipVoiceChannel;
                     }
-                    func(
-                        newState.guild,
-                        `• ${newState.channel.name}`,
-                        newState.member
-                    )
+                    let name = "● " + newState.channel.name.replace("➕", "");
+
+                    func(newState.guild, name, newState.member)
                         .then((channel) => {
                             return channel.setParent(
                                 newState.channel.parentId,
