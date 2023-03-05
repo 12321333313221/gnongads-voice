@@ -20,6 +20,9 @@ class CommandManager {
             message.reply(this.incorrectCommand);
             return null;
         }
+        if (!commandObj.hasAccess(message.member.roles.cache)) {
+            return;
+        }
 
         commandObj = commandObj.getSubcommand(commands);
         if (!commandObj) {
