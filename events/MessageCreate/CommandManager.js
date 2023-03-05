@@ -17,7 +17,7 @@ class CommandManager {
             }
         }
         if (!commandObj) {
-            message.reply(this.incorrectCommand);
+            //message.reply(this.incorrectCommand);
             return null;
         }
         if (!commandObj.hasAccess(message.member.roles.cache)) {
