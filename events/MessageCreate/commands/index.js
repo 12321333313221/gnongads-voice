@@ -1,1 +1,1 @@
-module.exports = [require("./channels"), require("./kick")];
+module.exports = [require("./channels"), require("./kick"), require("./voice")];
