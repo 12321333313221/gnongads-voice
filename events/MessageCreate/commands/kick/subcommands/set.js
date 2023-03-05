@@ -9,7 +9,7 @@ module.exports = {
         if (commands.length == 3) {
             kUserId = commands[2];
         }
-
+        kUserId = kUserId.substr(2, kUserId.length - 2 - 1);
         if (message.member.id === kUserId) {
             message.reply("так нельзя");
             return;

@@ -6,13 +6,14 @@ module.exports = {
     verify: function (str) {
         return this.alias.find((alias) => alias === str);
     },
+    hasAccess: function (roles) {
+        return true;
+    },
     getSubcommand: function (commands) {
         if (commands.length === 2) {
-        }
-        if (!isNaN(commands[1])) {
-            /** примитивная проверка */
             return this.subcommands.find((act) => act.name === "set");
         }
+
         return this.subcommands.find((act) => act.name === commands[1]);
     },
 };
