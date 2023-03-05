@@ -12,6 +12,12 @@ class VoiceStateUpdateController {
         return guild.channels.create({
             name: name,
             type: ChannelType.GuildVoice,
+            permissionOverwrites: [
+                {
+                    id: guild.roles.everyone.id,
+                    deny: [PermissionFlagsBits.SendMessages],
+                },
+            ],
             reason: "Клиент запросил простой канал",
         });
     }
@@ -22,10 +28,11 @@ class VoiceStateUpdateController {
             permissionOverwrites: [
                 {
                     id: member.id,
-                    allow: [
-                        PermissionFlagsBits.ManageChannels,
-                        PermissionFlagsBits.ManageRoles,
-                    ],
+                    allow: [PermissionFlagsBits.SendMessages],
+                },
+                {
+                    id: guild.roles.everyone.id,
+                    deny: [PermissionFlagsBits.SendMessages],
                 },
             ],
             reason: "Клиент запросил вип канал",
