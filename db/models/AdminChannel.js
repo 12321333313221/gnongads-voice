@@ -15,7 +15,8 @@ class AdminChannel extends Base {
             guildId TEXT,
             categoryId TEXT,
             channelId TEXT,
-            creatorId TEXT
+            creatorId TEXT,
+            isVip INTEGE NOT NULL
             )`;
         return this.db.run(sql);
     }
@@ -28,10 +29,10 @@ class AdminChannel extends Base {
      * @param {*} creatorId айди создателя
      * @returns {Promise}
      */
-    create(guildId, categoryId, channelId, creatorId) {
+    create(guildId, categoryId, channelId, creatorId, isVip) {
         return this.db.run(
-            `INSERT INTO ${this.name} (guildId,categoryId,channelId,creatorId) VALUES(?,?,?,?)`,
-            [guildId, categoryId, channelId, creatorId]
+            `INSERT INTO ${this.name} (guildId,categoryId,channelId,creatorId,isVip) VALUES(?,?,?,?,?)`,
+            [guildId, categoryId, channelId, creatorId, isVip]
         );
     }
 

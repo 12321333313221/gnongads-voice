@@ -25,7 +25,8 @@ module.exports = {
                     message.guildId,
                     categoryId,
                     channel.id,
-                    message.member.id
+                    message.member.id,
+                    0
                 );
                 let channelPromise = new Promise((res, rej) => {
                     res(channel);

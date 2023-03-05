@@ -13,6 +13,9 @@ ${inlineCode(".ch add 1077832335682195567 Специальный канал")}
 |${bold("link - линкует канал с ботом")}
 ${inlineCode(".ch link <id канала>")}
 ${inlineCode(".ch link 1078702200731213915")}
+${inlineCode(
+    ".ch link -v 1078702200731213915"
+)} -v обозначение что это вип канал
 
 | ${bold("del - удаляет канал с сервера")}
 ${inlineCode(".ch del <id канала>")}

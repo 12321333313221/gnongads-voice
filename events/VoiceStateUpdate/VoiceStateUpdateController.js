@@ -38,6 +38,26 @@ class VoiceStateUpdateController {
             reason: "Клиент запросил вип канал",
         });
     }
+    createPersonalVoiceChannel(guild, name, member) {
+        return guild.channels.create({
+            name: name,
+            type: ChannelType.GuildVoice,
+            permissionOverwrites: [
+                {
+                    id: member.id,
+                    allow: [
+                        PermissionFlagsBits.SendMessages,
+                        PermissionFlagsBits.ManageChannels,
+                    ],
+                },
+                {
+                    id: guild.roles.everyone.id,
+                    deny: [PermissionFlagsBits.SendMessages],
+                },
+            ],
+            reason: "Клиент запросил вип канал",
+        });
+    }
     setParent(channel, parentId) {
         return channel.setParent(parentId);
     }
@@ -98,18 +118,24 @@ class VoiceStateUpdateController {
     processCreateChannel(oldState, newState) {
         return this.models.AdminChannel.getAll(newState.guild.id).then(
             (data) => {
-                if (
-                    data.find(
-                        (channel) => channel.channelId === newState.channelId
-                    )
-                ) {
+                let findedChannel = data.find(
+                    (channel) => channel.channelId === newState.channelId
+                );
+                if (findedChannel) {
                     let func = this.createVoiceChannel;
-                    if (
-                        newState.member.roles.cache.find(
-                            (role) => role.id === "1078705130972647565"
-                        )
-                    ) {
+                    let memberVip = newState.member.roles.cache.find(
+                        (role) => role.id === "1078705130972647565"
+                    );
+                    if (memberVip) {
                         func = this.createVipVoiceChannel;
+                    }
+                    if (memberVip && findedChannel.isVip === 1) {
+                        func = this.createPersonalVoiceChannel;
+                    } else if (findedChannel.isVip === 1) {
+                        newState.member.voice.disconnect(
+                            "пользователь запросил кик"
+                        );
+                        return;
                     }
                     let name = "● " + newState.channel.name.replace("➕", "");
 

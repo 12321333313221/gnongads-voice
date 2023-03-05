@@ -3,17 +3,21 @@ const Promise = require("bluebird");
 module.exports = {
     name: "link",
     func: function (models, message, commands) {
-        let categoryId = null;
+        let vip = 0;
         let id = "default";
+        if (commands[2] === "-v") {
+            vip = 1;
+        }
         message.guild.channels
-            .fetch(commands[2])
+            .fetch(commands[commands.length - 1])
             .then((channel) => {
                 //console.log(channel);
                 let addPromise = models.AdminChannel.create(
                     message.guildId,
                     channel.parentId,
                     channel.id,
-                    message.member.id
+                    message.member.id,
+                    vip
                 );
                 let channelPromise = new Promise((res, rej) => {
                     res(channel);
