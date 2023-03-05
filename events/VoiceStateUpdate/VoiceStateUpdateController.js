@@ -61,7 +61,7 @@ class VoiceStateUpdateController {
                     channel.guildId,
                     channel.channelId
                 );
-                let dcPromise = this.models.KickedUser.deleteChannel(
+                let dcPromise = this.models.KickedUser.deleteByCreatorId(
                     oldState.guild.id,
                     oldState.channelId,
                     oldState.member.id
