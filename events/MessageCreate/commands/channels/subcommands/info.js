@@ -10,6 +10,10 @@ ${inlineCode(".ch show")}
 ${inlineCode(".ch add <id категории> <название>")}
 ${inlineCode(".ch add 1077832335682195567 Специальный канал")}
 
+|${bold("link - линкует канал с ботом")}
+${inlineCode(".ch link <id канала>")}
+${inlineCode(".ch link 1078702200731213915")}
+
 | ${bold("del - удаляет канал с сервера")}
 ${inlineCode(".ch del <id канала>")}
 ${inlineCode(".ch del 1078702200731213915")}

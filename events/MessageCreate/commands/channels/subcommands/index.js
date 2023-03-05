@@ -4,4 +4,5 @@ module.exports = [
     require("./update"),
     require("./show"),
     require("./info"),
+    require("./link"),
 ];

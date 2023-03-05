@@ -33,7 +33,6 @@ module.exports = {
                 return Promise.all([createPromise, channelPromise]);
             })
             .then((data) => {
-                console.log(data);
                 message.reply(`канал создан <#${data[1].id}>`);
             })
             .catch((err) => {
