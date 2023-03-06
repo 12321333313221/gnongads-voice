@@ -5,4 +5,5 @@ module.exports = [
     require("./show"),
     require("./info"),
     require("./link"),
+    require("./unlink"),
 ];
