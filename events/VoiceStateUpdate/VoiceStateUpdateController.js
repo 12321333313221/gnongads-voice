@@ -214,10 +214,15 @@ class VoiceStateUpdateController {
              * человек вышел с войс канала
              */
             this.processDeleteChannel(oldState, newState);
-        } else if (oldState.channelId && newState.channelId) {
+        } else if (
+            oldState.channelId &&
+            newState.channelId &&
+            oldState.channelId != newState.channelId
+        ) {
             /**
              * человек перешел из войс канала в канал
              */
+
             this.weNeedDisconnect(
                 newState.guild.id,
                 newState.channelId,
