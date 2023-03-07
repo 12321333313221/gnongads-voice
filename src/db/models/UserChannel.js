@@ -1,6 +1,5 @@
 const Base = require("./Base");
-
-class AdminChannel extends Base {
+class UserChannel extends Base {
     constructor(db, models, name) {
         super(db, models, name);
     }
@@ -16,11 +15,10 @@ class AdminChannel extends Base {
             categoryId TEXT,
             channelId TEXT,
             creatorId TEXT,
-            isVip INTEGE NOT NULL
+            isVip BOOLEAN
             )`;
         return this.db.run(sql);
     }
-
     /**
      * Добавлит в таблицу новый канал
      * @param {*} guildId айди гильдии
@@ -35,25 +33,6 @@ class AdminChannel extends Base {
             [guildId, categoryId, channelId, creatorId, isVip]
         );
     }
-
-    /**
-     * Обновить категорию канала
-     * @param {*} guildId айди гильдии
-     * @param {*} channelId айди новой категории
-     * @param {*} categoryId айди канала
-     * @returns {Promise}
-     */
-    update(guildId, channelId, categoryId) {
-        return this.db.run(
-            `
-        UPDATE ${this.name}
-        SET categoryId=?
-        WHERE (guildId=? AND channelId=?)
-        `,
-            [categoryId, guildId, channelId]
-        );
-    }
-
     /**
      * Удалить из таблицы канал
      * @param {*} guildId айди гильдии
@@ -66,7 +45,6 @@ class AdminChannel extends Base {
             [guildId, channelId]
         );
     }
-
     /**
      * Вернуть канал
      * @param {*} guildId айди гильдии
@@ -75,10 +53,21 @@ class AdminChannel extends Base {
      */
     getChannel(guildId, channelId) {
         return this.db.get(
-            `SELECT * FROM ${this.name} WHERE (guildId=? AND channelId=?)`,
+            `SELECT * FROM  ${this.name} WHERE (guildId=? AND channelId=?)`,
             [guildId, channelId]
         );
     }
+    /**
+     * вернуть канал по создателю
+     * @param {*} guildId
+     * @param {*} creatorId
+     * @returns
+     */
+    getChannelsByCreatorId(guildId, creatorId) {
+        return this.db.all(
+            `SELECT * FROM  ${this.name} WHERE (guildId=? AND creatorId=?)`,
+            [guildId, creatorId]
+        );
+    }
 }
-
-module.exports = AdminChannel;
+module.exports = UserChannel;

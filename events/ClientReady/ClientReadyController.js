@@ -8,7 +8,7 @@ class ClientReadyController {
     async func(client) {
         const d = new Date();
         console.log(
-            `[${d.toLocaleString()}]\tБОТ '${client.user.tag}' готов к работе`
+            `[${d.toLocaleString()}]БОТ '${client.user.tag}' готов к работе`
         );
     }
 }
