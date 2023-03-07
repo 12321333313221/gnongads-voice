@@ -197,7 +197,7 @@ class VoiceStateUpdateController {
             member.voice.disconnect("пользователь запросил кик");
         });
     }
-    func(oldState, newState) {
+    async func(oldState, newState) {
         /**
          * ИНФОРМАЦИЯ
          * есть 3 события

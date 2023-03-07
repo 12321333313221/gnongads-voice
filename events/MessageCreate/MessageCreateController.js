@@ -6,7 +6,7 @@ class MessageCreateController {
         this.models = models;
         this.comman = new CommandManager(models);
     }
-    func(message) {
+    async func(message) {
         try {
             //проверка на бота
             if (

@@ -5,7 +5,7 @@ class ClientReadyController {
     getName() {
         return "clientReadyController";
     }
-    func(client) {
+    async func(client) {
         const d = new Date();
         console.log(
             `[${d.toLocaleString()}]\tБОТ '${client.user.tag}' готов к работе`
