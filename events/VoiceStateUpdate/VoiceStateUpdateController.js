@@ -8,7 +8,7 @@ class VoiceStateUpdateController {
     getName() {
         return "voiceStateUpdateController";
     }
-    createVoiceChannel(guild, name) {
+    createVoiceChannel(guild, name, parentId) {
         return guild.channels.create({
             name: name,
             type: ChannelType.GuildVoice,
@@ -18,10 +18,11 @@ class VoiceStateUpdateController {
                     deny: [PermissionFlagsBits.SendMessages],
                 },
             ],
+            parent: parentId,
             reason: "Клиент запросил простой канал",
         });
     }
-    createVipVoiceChannel(guild, name, member) {
+    createVipVoiceChannel(guild, name, member, parentId) {
         return guild.channels.create({
             name: name,
             type: ChannelType.GuildVoice,
@@ -35,6 +36,7 @@ class VoiceStateUpdateController {
                     deny: [PermissionFlagsBits.SendMessages],
                 },
             ],
+            parent: parentId,
             reason: "Клиент запросил вип канал",
         });
     }
@@ -147,15 +149,12 @@ class VoiceStateUpdateController {
                     }
                     let name = "● " + newState.channel.name.replace("➕", "");
 
-                    func(newState.guild, name, newState.member)
-                        .then((channel) => {
-                            return channel.setParent(
-                                newState.channel.parentId,
-                                {
-                                    lockPermissions: false,
-                                }
-                            );
-                        })
+                    func(
+                        newState.guild,
+                        name,
+                        newState.member,
+                        newState.channel.parentId
+                    )
                         .then((channel) => {
                             return new Promise(function (res, rej) {
                                 newState
