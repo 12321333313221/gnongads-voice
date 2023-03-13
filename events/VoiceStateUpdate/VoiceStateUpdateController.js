@@ -74,18 +74,14 @@ class VoiceStateUpdateController {
     processDeleteChannel(oldState, newState) {
         let guildId = oldState.guild.id,
             creatorId = oldState.member.id;
-        return this.models.UserChannel.getChannelsByCreatorId(
-            guildId,
-            creatorId
-        )
-            .then((data) => {
-                let channel = data.find(
-                    (channel) => channel.channelId === oldState.channelId
-                );
+        return this.models.UserChannel.getChannel(guildId, oldState.channelId)
+            .then((channel) => {
                 if (!channel) {
                     return;
                 }
-
+                if (oldState.channel.members.size != 0) {
+                    return;
+                }
                 let dvcPromise = this.deleteVoiceChannel(
                     oldState.guild,
                     channel.channelId
