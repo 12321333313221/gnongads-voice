@@ -1,4 +1,8 @@
-const { ChannelType, PermissionFlagsBits } = require("discord.js");
+const {
+    ChannelType,
+    PermissionFlagsBits,
+    GuildChannelManager,
+} = require("discord.js");
 const Promise = require("bluebird");
 class VoiceStateUpdateController {
     constructor(db, models) {
@@ -8,7 +12,7 @@ class VoiceStateUpdateController {
     getName() {
         return "voiceStateUpdateController";
     }
-    createVoiceChannel(guild, name, parentId) {
+    createVoiceChannel(guild, name, member, parentId) {
         return guild.channels.create({
             name: name,
             type: ChannelType.GuildVoice,
@@ -148,7 +152,7 @@ class VoiceStateUpdateController {
                         return;
                     }
                     let name = "● " + newState.channel.name.replace("➕", "");
-
+                    console.log("parentId ", newState.channel.parentId);
                     func(
                         newState.guild,
                         name,
