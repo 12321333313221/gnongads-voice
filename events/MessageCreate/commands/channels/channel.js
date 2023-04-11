@@ -1,7 +1,7 @@
 module.exports = {
     name: ".ch",
     description: `Функционал для работы с каналами`,
-    alias: [".chd", ".channel", ".channels", ".chan"],
+    alias: [".ch", ".channel", ".channels", ".chan"],
     subcommands: require("./subcommands"),
     roles: [
         "1008954835913162752",
@@ -9,6 +9,7 @@ module.exports = {
         "827202390682894358",
         "1077832145566965793",
         "1081615301961064572",
+        "740591998297440339",
         "740591998297440339",
     ],
     verify: function (str) {
