@@ -12,34 +12,21 @@ class VoiceStateUpdateController {
     getName() {
         return "voiceStateUpdateController";
     }
-    createVoiceChannel(guild, name, member, parentId) {
+
+    createVoiceChannel(guild, name, member, parentId, permissions) {
         return guild.channels.create({
             name: name,
             type: ChannelType.GuildVoice,
-            permissionOverwrites: [
-                {
-                    id: guild.roles.everyone.id,
-                    deny: [PermissionFlagsBits.SendMessages],
-                },
-            ],
+            permissionOverwrites: permissions.cache,
             parent: parentId,
             reason: "Клиент запросил простой канал",
         });
     }
-    createVipVoiceChannel(guild, name, member, parentId) {
+    createVipVoiceChannel(guild, name, member, parentId, permissions) {
         return guild.channels.create({
             name: name,
             type: ChannelType.GuildVoice,
-            permissionOverwrites: [
-                {
-                    id: member.id,
-                    allow: [PermissionFlagsBits.SendMessages],
-                },
-                {
-                    id: guild.roles.everyone.id,
-                    deny: [PermissionFlagsBits.SendMessages],
-                },
-            ],
+            permissionOverwrites: permissions.cache,
             parent: parentId,
             reason: "Клиент запросил вип канал",
         });
@@ -153,7 +140,8 @@ class VoiceStateUpdateController {
                         newState.guild,
                         name,
                         newState.member,
-                        newState.channel.parentId
+                        newState.channel.parentId,
+                        newState.channel.permissionOverwrites
                     )
                         .then((channel) => {
                             return new Promise(function (res, rej) {
