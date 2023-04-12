@@ -1,6 +1,7 @@
 const clientReady = require("./ClientReady");
 const messageCreate = require("./MessageCreate");
 const VoiceStateUpdate = require("./VoiceStateUpdate");
+const channelCreate = require("./ChannelCreate");
 
 class EventManager {
     constructor(db, models) {
@@ -9,6 +10,7 @@ class EventManager {
         this.addController(new clientReady(this.db));
         this.addController(new messageCreate(this.db, this.models));
         this.addController(new VoiceStateUpdate(this.db, this.models));
+        this.addController(new channelCreate(this.db, this.models));
     }
     addController(controller) {
         this[controller.getName()] = controller.func.bind(controller);

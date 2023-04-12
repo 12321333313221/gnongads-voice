@@ -39,6 +39,7 @@ for (const file of commandFiles) {
 client.login(process.env.TOKEN);
 
 client.on(Events.ClientReady, evman.clientReadyController);
+client.on(Events.ChannelCreate, evman.channelCreateController);
 client.on(Events.MessageCreate, evman.messageCreateController);
 client.on(Events.VoiceStateUpdate, evman.voiceStateUpdateController);
 client.on(Events.InteractionCreate, async (interaction) => {
