@@ -11,6 +11,7 @@ module.exports = {
         "1081615301961064572",
         "740591998297440339",
         "740591998297440339",
+        "1105452016148435004",
     ],
     verify: function (str) {
         return this.alias.find((alias) => alias === str);
