@@ -54,7 +54,7 @@ class VoiceStateUpdateController {
     setParent(channel, parentId) {
         return channel.setParent(parentId);
     }
-    deleteVoiceChannel(guild, id) {
+    async deleteVoiceChannel(guild, id) {
         return guild.channels.delete(id, "создатель покинул чат");
     }
 
